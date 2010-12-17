@@ -1,0 +1,42 @@
+= Redis Lite 
+
+Eventmachine based adapter that talks redis 2.0 protocol
+
+== Installation
+
+  gem install em-redislite
+
+=== Dependencies
+
+* Ruby >= 1.9.1
+* eventmachine
+
+== Usage
+
+  require 'em/redislite'
+
+  EM.run do
+    client  = EM::Redis.connect  # defaults to { host: '127.0.0.1', port: 6379 }
+    client.errback {|error| $stderr.puts "Redis Error: #{error}"; EM.stop }
+
+    r = client.command :get, "mykey"
+    r.callback {|value| p value }
+    r.errback  {|error| p error }
+
+    # syntactic sugar for string and boolean commands
+    r = client.get "mykey"
+    r = client.set "mykey", "some value", 1800  # ttl
+
+    # you should be running redis in a private network or have it firewalled but ...
+    r = client.command :auth, "my super dooper password"  # should work as well
+  end
+
+== Testing
+
+There are no tests at the moment coz I'm a lazy slob.
+
+== License
+
+GNU GPLv3, so its free and comes with no guarantees. If it brings down your website or burns down your house, I will
+not be held responsible. Use it at your own risk. You can read all about GNU here: http://www.gnu.org and
+GNU GPLv3 here: http://www.gnu.org/licenses/gpl.txt.

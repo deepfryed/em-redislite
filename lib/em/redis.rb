@@ -44,7 +44,7 @@ module EM
         error = Error.new(msg)
         @pool.each {|r| r.fail(error) }
         @pool = []
-        fail Error.new(error)
+        fail error
       end
 
       def receive_data data

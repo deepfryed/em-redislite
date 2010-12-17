@@ -1,5 +1,3 @@
-require 'em/redis'
-
 class EM::Redis::Client
   COMMANDS = {
     string:  %w(get strlen getset setnx setex setbit getbit mset msetnx mget incr incrby decr decrby

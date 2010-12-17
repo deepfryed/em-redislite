@@ -18,7 +18,7 @@ class EM::Redis::Client
   # set here is special since it combines :set and optional :expire
   def set key, value, ttl = nil
     if ttl
-      defer = DefaultDeferrable.new
+      defer = EM::DefaultDeferrable.new
       req   = command(:set, key, value)
       req.callback do
         req = command(:expire, key, ttl)

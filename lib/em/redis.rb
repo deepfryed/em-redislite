@@ -5,7 +5,7 @@ module EM
 
     DEFAULTS = { host: '127.0.0.1', port: 6379 }
 
-    def self.connect options = DEFAULTS
+    def self.connect options = {}
       options = DEFAULTS.merge(options)
       begin
         EM.connect options[:host], options[:port], Client

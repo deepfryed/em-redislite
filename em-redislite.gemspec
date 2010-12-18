@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
 	s.authors       = [ 'Bharanee Rathna' ]
 	s.email         = %q{deepfryed@gmail.com}
 	s.homepage      = %q{http://github.com/deepfryed/em-redislite}
-	s.files         = %w(README.rdoc em-redislite.gemspec) + Dir.glob("{lib}/**/*")
+	s.files         = %w(README.rdoc em-redislite.gemspec) + Dir.glob("{lib,tests}/**/*")
 	s.require_paths = %w(lib)
 	s.platform      = Gem::Platform::RUBY
 

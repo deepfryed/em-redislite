@@ -8,7 +8,7 @@ module EM
     def self.connect options = {}
       options = DEFAULTS.merge(options)
       begin
-        EM.connect options[:host], options[:port], Client
+        EM.connect options[:host], options[:port], Client, { host: options[:host], port: options[:port] }
       rescue ConnectionError => e
         client = Client.new ''
         client.fail(Error.new(e.message))
@@ -18,6 +18,10 @@ module EM
 
     class Client < Connection
       include Deferrable
+
+      def initialize options
+        @options = options
+      end
 
       def post_init
         @buffer     = ''
@@ -38,6 +42,14 @@ module EM
 
       def on_error msg, dns_error = false
         unbind(msg)
+      end
+
+      def reset_errback &block
+        @errbacks = [ block ]
+      end
+
+      def reconnect!
+        EM.reconnect @options[:host], @options[:port], self
       end
 
       def unbind msg = 'lost connection'

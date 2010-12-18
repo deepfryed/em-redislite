@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
 	s.name          = %q{em-redislite}
-	s.version       = '0.1'
+	s.version       = '0.1.1'
 	s.summary       = 'A lightweight EM based Redis adapter'
 	s.description   = 'A very simple EventMachine based adapter that talks Redis protocol'
 	s.authors       = [ 'Bharanee Rathna' ]

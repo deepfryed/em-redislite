@@ -10,7 +10,7 @@ module EM
       begin
         EM.connect options[:host], options[:port], Client, { host: options[:host], port: options[:port] }
       rescue ConnectionError => e
-        client = Client.new ''
+        client = Client.new(nil)
         client.fail(Error.new(e.message))
         client
       end
@@ -19,7 +19,7 @@ module EM
     class Client < Connection
       include Deferrable
 
-      def initialize options
+      def initialize options = {}
         @options = options
       end
 
@@ -29,6 +29,10 @@ module EM
         @want_lines = 0
         @pool       = []
         @lines      = []
+      end
+
+      def error?
+        signature ? super : true
       end
 
       def command name, *args

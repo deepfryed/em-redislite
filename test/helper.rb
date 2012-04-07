@@ -1,5 +1,5 @@
-require 'minitest/spec'
-require_relative '../lib/em-redislite'
+require 'minitest/autorun'
+require 'em-redislite'
 
 class MiniTest::Unit::TestCase
   def em_run &block
@@ -11,5 +11,3 @@ class MiniTest::Unit::TestCase
     end
   end
 end
-
-MiniTest::Unit.autorun

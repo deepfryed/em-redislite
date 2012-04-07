@@ -4,8 +4,8 @@ describe 'Command Expire' do
   it 'should support set with expiry' do
     @success = false
     em_run do |client|
-      r = client.set 'mykey', 'foobar', 1
-      r = client.get 'mykey'
+      r = client.setex 'mykey', 1, 'foobar'
+      r = client.get   'mykey'
       r.callback do |value|
         EM.stop unless value == 'foobar'
         EM.add_timer(2) do

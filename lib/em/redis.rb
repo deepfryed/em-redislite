@@ -1,9 +1,12 @@
 require 'eventmachine'
+
 module EM
   module Redis
-    class Error < StandardError; end
 
+    VERSION  = '0.2.0'
     DEFAULTS = { host: '127.0.0.1', port: 6379 }
+
+    class Error < StandardError; end
 
     def self.connect options = {}
       options = DEFAULTS.merge(options)
@@ -56,7 +59,7 @@ module EM
         EM.reconnect @options[:host], @options[:port], self
       end
 
-      def unbind msg = 'lost connection'
+      def unbind msg = 'lost db connection'
         error = Error.new(msg)
         @pool.each {|r| r.fail(error) }
         @pool = []
@@ -101,6 +104,20 @@ module EM
 
         process_bytes(nil) if @want_bytes < 0
       end
+
+      COMMANDS = %w(
+        APPEND AUTH BLPOP BRPOP BRPOPLPUSH DECR DECRBY DEL DISCARD DUMP ECHO EXEC EXISTS EXPIRE EXPIREAT
+        GET GETBIT GETRANGE GETSET HDEL HEXISTS HGET HGETALL HINCRBY HINCRBYFLOAT HKEYS HLEN HMGET HMSET
+        HSET HSETNX HVALS INCR INCRBY INCRBYFLOAT KEYS LINDEX LINSERT LLEN LPOP LPUSH LPUSHX LRANGE LREM
+        LSET LTRIM MGET MIGRATE MOVE MSET MSETNX MULTI OBJECT PERSIST PEXPIRE PEXPIREAT PING PSETEX PTTL
+        QUIT RANDOMKEY RENAME RENAMENX RESTORE RPOP RPOPLPUSH RPUSH RPUSHX SADD SCARD SDIFF SDIFFSTORE
+        SELECT SET SETBIT SETEX SETNX SETRANGE SINTER SINTERSTORE SISMEMBER SMEMBERS SMOVE SORT SPOP
+        SRANDMEMBER SREM STRLEN SUNION SUNIONSTORE TTL TYPE UNWATCH WATCH ZADD ZCARD ZCOUNT ZINCRBY
+        ZINTERSTORE ZRANGE ZRANGEBYSCORE ZRANK ZREM ZREMRANGEBYRANK ZREMRANGEBYSCORE ZREVRANGE
+        ZREVRANGEBYSCORE ZREVRANK ZSCORE ZUNIONSTORE
+      ).freeze
+
+      COMMANDS.each {|name| send(:define_method, name.downcase) {|*args| command(name, *args) }}
     end # Client
   end # Redis
 end # EM

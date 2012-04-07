@@ -1,0 +1,7 @@
+== 0.2.0 (2012-04-08)
+
+* Rewrite to include methods for most redis commands.
+
+== 0.1.2 (2011-06-21)
+
+* Added Client#error?

@@ -12,6 +12,12 @@ Eventmachine based adapter that talks redis 2.0 protocol
 * eventmachine
 * em-synchrony (optional)
 
+## Unsupported commands
+
+* Pub/Sub
+* Scripting
+* Server
+
 ## Example
 
 ### Using callbacks

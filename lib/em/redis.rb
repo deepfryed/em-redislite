@@ -3,7 +3,7 @@ require 'eventmachine'
 module EM
   module Redis
 
-    VERSION  = '0.2.0'
+    VERSION  = '0.2.1'
     DEFAULTS = { host: '127.0.0.1', port: 6379 }
 
     class Error < StandardError; end

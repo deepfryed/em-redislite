@@ -2,14 +2,14 @@
 
 Gem::Specification.new do |s|
   s.name = "em-redislite"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bharanee Rathna"]
   s.date = "2012-04-08"
   s.description = "EventMachine based Redis client"
   s.email = ["deepfryed@gmail.com"]
-  s.files = ["test/test_connection.rb", "test/test_commands.rb", "test/helper.rb", "test/test_command_expire.rb", "lib/em/redis.rb", "lib/em/redis-synchrony.rb", "lib/em-redislite.rb", "README.md", "CHANGELOG"]
+  s.files = ["test/test_connection.rb", "test/test_commands.rb", "test/helper.rb", "test/test_command_expire.rb", "lib/em/redis.rb", "lib/em-redislite.rb", "lib/em-synchrony/em-redislite.rb", "README.md", "CHANGELOG"]
   s.homepage = "http://github.com/deepfryed/em-redislite"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.21"

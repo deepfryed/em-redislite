@@ -43,7 +43,7 @@ Eventmachine based adapter that talks redis 2.0 protocol
 
 ```ruby
   require 'em-redislite'
-  require 'em/redis-synchrony'
+  require 'em-synchrony/em-redislite'
 
   EM.run do
     EM.synchrony do

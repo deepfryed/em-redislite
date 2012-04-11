@@ -1,3 +1,7 @@
+== 0.2.2 (2012-04-11)
+
+* Avoid sending commands after Client#unbind.
+
 == 0.2.1 (2012-04-08)
 
 * Rename em/redis-synchrony -> em-synchrony/em-redislite.

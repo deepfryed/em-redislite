@@ -3,16 +3,18 @@ require 'eventmachine'
 module EM
   module Redis
 
-    VERSION  = '0.2.1'
+    VERSION  = '0.2.2'
     DEFAULTS = { host: '127.0.0.1', port: 6379 }
 
-    class Error < StandardError; end
+    class Error           < StandardError; end
+    class DataError       < Error; end
+    class ConnectionError < Error; end
 
     def self.connect options = {}
       options = DEFAULTS.merge(options)
       begin
         EM.connect options[:host], options[:port], Client, { host: options[:host], port: options[:port] }
-      rescue ConnectionError => e
+      rescue EM::ConnectionError => e
         client = Client.new(nil)
         client.fail(Error.new(e.message))
         client
@@ -21,6 +23,8 @@ module EM
 
     class Client < Connection
       include Deferrable
+
+      DB_ERROR = 'lost redis connection'
 
       def initialize options = {}
         @options = options
@@ -38,14 +42,18 @@ module EM
         signature ? super : true
       end
 
-      def command name, *args
+      def send_command name, *args
         defer = DefaultDeferrable.new
+        return defer.tap {defer.fail(ConnectionError.new(DB_ERROR))} if error?
+
         @pool << defer
         send_data "*#{args.length + 1}\r\n" +
                   "$#{name.length}\r\n#{name}\r\n" +
                   args.map(&:to_s).inject('') {|a,v| a + "$#{v.bytesize}\r\n#{v}\r\n"}
         defer
       end
+
+      alias :command :send_command
 
       def on_error msg, dns_error = false
         unbind(msg)
@@ -59,8 +67,11 @@ module EM
         EM.reconnect @options[:host], @options[:port], self
       end
 
-      def unbind msg = 'lost db connection'
-        error = Error.new(msg)
+      def unbind msg = DB_ERROR
+        close_connection
+        error      = ConnectionError.new(msg)
+        @signature = nil
+
         @pool.each {|r| r.fail(error) }
         @pool = []
         fail error
@@ -99,7 +110,7 @@ module EM
           when ':' then @pool.shift.succeed(data[1..-1])
           when '$' then @want_bytes = data[1..-1].to_i
           when '*' then @want_lines = data[1..-1].to_i
-          else     fail Error.new("Unknown data format: #{data}")
+          else     @pool.shift.fail DataError.new("Unknown data format: #{data}")
         end
 
         process_bytes(nil) if @want_bytes < 0

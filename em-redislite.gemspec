@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = "em-redislite"
-  s.version = "0.2.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bharanee Rathna"]
-  s.date = "2012-04-08"
+  s.date = "2012-04-11"
   s.description = "EventMachine based Redis client"
   s.email = ["deepfryed@gmail.com"]
   s.files = ["test/test_connection.rb", "test/test_commands.rb", "test/helper.rb", "test/test_command_expire.rb", "lib/em/redis.rb", "lib/em-redislite.rb", "lib/em-synchrony/em-redislite.rb", "README.md", "CHANGELOG"]
